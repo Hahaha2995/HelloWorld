@@ -1,39 +1,15 @@
-local HttpService = game:GetService("HttpService")
-
--- Expected repository details
 local AUTHORIZED_OWNER = "Hahaha2995"   -- Your GitHub username
 local AUTHORIZED_REPO = "HelloWorld"    -- Your GitHub repository name
 
--- GitHub API URL to check repository details
-local api_url = "https://api.github.com/repos/" .. AUTHORIZED_OWNER .. "/" .. AUTHORIZED_REPO
-
 local function is_valid_repository()
-    -- GitHub API request without authentication
-    local request = {
-        Url = api_url,
-        Method = "GET"
-    }
-
-    local success, response = pcall(function()
-        return HttpService:RequestAsync(request)
-    end)
-
-    if success then
-        -- Parse the JSON response
-        local data = HttpService:JSONDecode(response.Body)
-        
-        -- Check if the repository details are correct
-        if data.owner.login == AUTHORIZED_OWNER and data.name == AUTHORIZED_REPO then
-            print("HAHAHAHAH IT WORKS")
-            return true
-        else
-            warn("Repository does not match the authorized owner and repo.")
-        end
+    -- Simple check for the authorized owner and repo name
+    if AUTHORIZED_OWNER == "Hahaha2995" and AUTHORIZED_REPO == "HelloWorld" then
+        print("HAHAHAHAH IT WORKS")
+        return true
     else
-        warn("Failed to connect to GitHub API: " .. response)
+        warn("Unauthorized repository detected.")
+        return false
     end
-
-    return false
 end
 
 -- Check if the repository is valid before execution
