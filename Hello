@@ -5,46 +5,43 @@ local AUTHORIZED_OWNER = "Hahaha2995"   -- Your GitHub username
 local AUTHORIZED_REPO = "HelloWorld"    -- Your GitHub repository name
 local GITHUB_PAT = os.getenv("GITHUB_PAT") -- Fetches the token from the environment
 
--- GitHub API URL to fetch repository details
-local api_url = "https://api.github.com/repos/" .. AUTHORIZED_OWNER .. "/" .. AUTHORIZED_REPO
+-- GitHub API URL to fetch raw file content (adjust the file path if needed)
+local raw_file_url = "https://raw.githubusercontent.com/" .. AUTHORIZED_OWNER .. "/" .. AUTHORIZED_REPO .. "/main/Hello"
 
-local function is_valid_repository()
+local function fetch_file_content()
     -- Prepare the headers with the Authorization token
     local headers = {
         ["Authorization"] = "token " .. GITHUB_PAT,
         ["Accept"] = "application/vnd.github.v3+json"
     }
 
-    -- Use a Request table for GetAsync
     local request = {
-        Url = api_url,
+        Url = raw_file_url,
         Method = "GET",
         Headers = headers
     }
 
-    -- Make the API call
     local success, response = pcall(function()
         return HttpService:RequestAsync(request)
     end)
 
     if success then
-        -- Parse the JSON response
-        local data = HttpService:JSONDecode(response.Body)
-        
-        -- Check if the repository details are correct
-        return data.owner.login == AUTHORIZED_OWNER and data.name == AUTHORIZED_REPO
+        return response.Body -- The raw content of the file
     else
-        -- Log the error message if the API call fails
-        warn("Failed to connect to GitHub API: " .. response)
+        warn("Failed to fetch file content: " .. response)
     end
 
-    return false
+    return nil
 end
 
--- Check if the repository is valid before execution
-if not is_valid_repository() then
-    error("Unauthorized repository detected. Script execution blocked.")
-end
+-- Fetch the file content
+local file_content = fetch_file_content()
 
--- If the repository is valid, print the success message
-print("HAHAHAHAHHA IT WORKS")
+if file_content then
+    -- Print the raw content of the file if successfully fetched
+    print("Fetched File Content:\n" .. file_content)
+    -- Print confirmation that everything is working
+    print("HAHAHAHAH IT WORKS")
+else
+    error("Failed to fetch file content from GitHub")
+end
