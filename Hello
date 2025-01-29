@@ -1,0 +1,50 @@
+local HttpService = game:GetService("HttpService")
+
+-- Expected repository details
+local AUTHORIZED_OWNER = "Hahaha2995"   -- Your GitHub username
+local AUTHORIZED_REPO = "HelloWorld"    -- Your GitHub repository name
+local GITHUB_PAT = os.getenv("GITHUB_PAT") -- Fetches the token from the environment
+
+-- GitHub API URL to fetch repository details
+local api_url = "https://api.github.com/repos/" .. AUTHORIZED_OWNER .. "/" .. AUTHORIZED_REPO
+
+local function is_valid_repository()
+    -- Prepare the headers with the Authorization token
+    local headers = {
+        ["Authorization"] = "token " .. GITHUB_PAT,
+        ["Accept"] = "application/vnd.github.v3+json"
+    }
+
+    -- Use a Request table for GetAsync
+    local request = {
+        Url = api_url,
+        Method = "GET",
+        Headers = headers
+    }
+
+    -- Make the API call
+    local success, response = pcall(function()
+        return HttpService:RequestAsync(request)
+    end)
+
+    if success then
+        -- Parse the JSON response
+        local data = HttpService:JSONDecode(response.Body)
+        
+        -- Check if the repository details are correct
+        return data.owner.login == AUTHORIZED_OWNER and data.name == AUTHORIZED_REPO
+    else
+        -- Log the error message if the API call fails
+        warn("Failed to connect to GitHub API: " .. response)
+    end
+
+    return false
+end
+
+-- Check if the repository is valid before execution
+if not is_valid_repository() then
+    error("Unauthorized repository detected. Script execution blocked.")
+end
+
+-- If the repository is valid, print the success message
+print("HAHAHAHAHHA IT WORKS")
