@@ -1,21 +1,21 @@
 local loadScript = syn and syn.loadstring or fluxus and fluxus.loadstring or loadstring
 
 if loadScript then
-    local url = "https://raw.githubusercontent.com/Hahaha2995/HelloWorld/main/Hello"
-    -- Try to load the script from the URL directly
-    local scriptSource = game:HttpGet(url, true)  -- Using HttpGet to fetch the script
+    -- Define your script content directly here
+    local scriptSource = [[
+        -- Your script goes here
+        print("This is a sample script executed via loadstring.")
+        -- Add other Lua logic or script content as needed
+    ]]
     
-    if scriptSource then
-        local func, err = loadScript(scriptSource)  -- Using loadstring to compile the script
+    -- Use loadstring() to compile and execute the script
+    local func, err = loadstring(scriptSource)  -- This is where loadstring is used
 
-        if func then
-            func()  -- Execute the loaded script
-            print("yassss")  -- Custom print statement
-        else
-            warn("Failed to load the script: " .. err)  -- If loadstring fails, show the error message
-        end
+    if func then
+        func()  -- Execute the loaded script
+        print("ye§§§ 𝓘𝓣 ꅏꂦꋪꀘꑄ")  -- Custom print statement
     else
-        warn("Failed to fetch script")
+        warn("Failed to load the script: " .. err)  -- If loadstring fails, show the error message
     end
 else
     warn("loadstring function not found!")
