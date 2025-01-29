@@ -1,19 +1,22 @@
--- You must use the actual loadstring to execute this script.
--- Do not run this file directly. Always use the loadstring.
+local doRequest = syn and syn.request or queue_on_teleport or fluxus and fluxus.request
 
-local url = "https://raw.githubusercontent.com/Hahaha2995/HelloWorld/main/Hello"
-local response = syn.request({Url = url})  -- Correct HTTP request function in Synapse X
+if doRequest then
+    local url = "https://raw.githubusercontent.com/Hahaha2995/HelloWorld/main/Hello"
+    local response = doRequest({Url = url})
 
-if response and response.Body then
-    local scriptSource = response.Body
-    local func, err = loadstring(scriptSource)  -- Using loadstring to compile the script
-    
-    if func then
-        func()  -- Execute the loaded script
-        print("ɎÈ§§§ 𝓘𝓣 ꅏꂦꋪꀘꑄ")  -- Custom print statement
+    if response and response.Body then
+        local scriptSource = response.Body
+        local func, err = loadstring(scriptSource)  -- Using loadstring to compile the script
+        
+        if func then
+            func()  -- Execute the loaded script
+            print("ɎÈ§§§ 𝓘𝓣 ꅏꂦꋪꀘꑄ")  -- Custom print statement
+        else
+            warn("Failed to load the script: " .. err)  -- If loadstring fails, show the error message
+        end
     else
-        warn("Failed to load the script: " .. err)  -- If loadstring fails, show the error message
+        warn("Failed to fetch script")
     end
 else
-    warn("Failed to fetch script")
+    warn("Request function not found!")
 end
