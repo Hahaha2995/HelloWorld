@@ -1,18 +1,25 @@
-local AUTHORIZED_OWNER = "Hahaha2995"   -- Your GitHub username
-local AUTHORIZED_REPO = "HelloWorld"    -- Your GitHub repository name
+-- Expected repository details
+local AUTHORIZED_OWNER = "Hahaha2995"  -- Your GitHub username
+local AUTHORIZED_REPO = "HelloWorld"   -- Your GitHub repository name
 
-local function is_valid_repository()
-    -- Simple check for the authorized owner and repo name
-    if AUTHORIZED_OWNER == "Hahaha2995" and AUTHORIZED_REPO == "HelloWorld" then
-        print("HAHAHAHAH IT WORKS")
-        return true
-    else
-        warn("Unauthorized repository detected.")
-        return false
-    end
+-- Function to check if the URL is valid
+local function is_valid_url(url)
+    -- Check if the URL matches your GitHub repository
+    return url:match("https://raw.githubusercontent.com/" .. AUTHORIZED_OWNER .. "/" .. AUTHORIZED_REPO)
 end
 
--- Check if the repository is valid before execution
-if not is_valid_repository() then
-    error("Unauthorized repository detected. Script execution blocked.")
+-- URL to load the code
+local url = "https://raw.githubusercontent.com/Hahaha2995/HelloWorld/main/Hello"
+
+-- Check if the URL is valid
+if is_valid_url(url) then
+    -- If the URL is valid, load and execute the code
+    local script = loadstring(game:HttpGet(url, true))
+    script()  -- Execute the loaded script
+
+    -- Print a success message
+    print("HAHAHAHAH IT WORKS")
+else
+    -- If the URL is not valid, deny execution
+    error("Unauthorized repository or URL detected. Script execution blocked.")
 end
