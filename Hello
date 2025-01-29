@@ -1,13 +1,13 @@
-local doRequest = syn and syn.request or queue_on_teleport or fluxus and fluxus.request
+local loadScript = syn and syn.loadstring or fluxus and fluxus.loadstring or loadstring
 
-if doRequest then
+if loadScript then
     local url = "https://raw.githubusercontent.com/Hahaha2995/HelloWorld/main/Hello"
-    local response = doRequest({Url = url})
+    -- Try to load the script from the URL directly
+    local scriptSource = game:HttpGet(url, true)  -- Using HttpGet to fetch the script
+    
+    if scriptSource then
+        local func, err = loadScript(scriptSource)  -- Using loadstring to compile the script
 
-    if response and response.Body then
-        local scriptSource = response.Body
-        local func, err = loadstring(scriptSource)  -- Using loadstring to compile the script
-        
         if func then
             func()  -- Execute the loaded script
             print("ɎÈ§§§ 𝓘𝓣 ꅏꂦꋪꀘꑄ")  -- Custom print statement
@@ -18,5 +18,5 @@ if doRequest then
         warn("Failed to fetch script")
     end
 else
-    warn("Request function not found!")
+    warn("loadstring function not found!")
 end
