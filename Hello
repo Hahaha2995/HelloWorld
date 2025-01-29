@@ -1,26 +1,25 @@
--- Set the flag to indicate the script is loaded via loadstring()
-_G.isLoadedFromString = true
+-- Define the correct URL that is allowed for execution
+local allowedUrl = "https://raw.githubusercontent.com/Hahaha2995/HelloWorld/main/Hello"
 
--- Define the URL of the Hello script
-local helloUrl = "https://raw.githubusercontent.com/Hahaha2995/HelloWorld/main/Hello"
+-- Define the URL to fetch the script from
+local url = "https://raw.githubusercontent.com/Hahaha2995/HelloWorld/main/Hello"
 
--- Fetch the content of the Hello script from the URL
-local helloScriptContent = game:HttpGet(helloUrl, true)
+-- Check if the URL matches the allowed repository
+if url == allowedUrl then
+    -- Fetch the content of the script from the allowed URL
+    local response = game:HttpGet(url)
 
--- Example of script that behaves differently depending on how it's executed
-local success, result = pcall(function()
-    local func = loadstring(helloScriptContent)  -- Load the script
+    -- Mark the environment to indicate the script is being loaded via loadstring
+    _G.isLoadedFromString = true
+
+    -- Use loadstring to execute the fetched script
+    local func, err = loadstring(response)
+
     if func then
-        -- This part is where the flag will be checked
         func()  -- Execute the loaded script
     else
-        warn("Failed to load the script!")
+        warn("Failed to load the script: " .. err)  -- If loadstring fails, show the error message
     end
-end)
-
--- Check if the script execution was successful or failed
-if not success then
-    print("Error executing script: " .. result)
 else
-    print("Script executed successfully!")
+    warn("This script is not from the allowed repository URL!")
 end
