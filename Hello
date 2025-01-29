@@ -1,22 +1,8 @@
-local loadScript = syn and syn.loadstring or fluxus and fluxus.loadstring or loadstring
+-- Example of script that behaves differently depending on how it's executed
 
-if loadScript then
-    -- Define your script content directly here
-    local scriptSource = [[
-        -- Your script goes here
-        print("This is a sample script executed via loadstring.")
-        -- Add other Lua logic or script content as needed
-    ]]
-    
-    -- Use loadstring() to compile and execute the script
-    local func, err = loadstring(scriptSource)  -- This is where loadstring is used
-
-    if func then
-        func()  -- Execute the loaded script
-        print("ye§§§ 𝓘𝓣 ꅏꂦꋪꀘꑄ")  -- Custom print statement
-    else
-        warn("Failed to load the script: " .. err)  -- If loadstring fails, show the error message
-    end
+if not _G.isLoadedFromString then
+    error("This script should be executed via loadstring()")
 else
-    warn("loadstring function not found!")
+    -- Your code here that should only run when loaded by loadstring()
+    print("Script executed via loadstring() from GitHub!")
 end
