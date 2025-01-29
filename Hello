@@ -10,7 +10,7 @@ if loadScript then
 
         if func then
             func()  -- Execute the loaded script
-            print("ɎÈ§§§ 𝓘𝓣 ꅏꂦꋪꀘꑄ")  -- Custom print statement
+            print("yassss")  -- Custom print statement
         else
             warn("Failed to load the script: " .. err)  -- If loadstring fails, show the error message
         end
