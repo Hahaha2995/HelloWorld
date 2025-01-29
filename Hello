@@ -3,22 +3,15 @@ local HttpService = game:GetService("HttpService")
 -- Expected repository details
 local AUTHORIZED_OWNER = "Hahaha2995"   -- Your GitHub username
 local AUTHORIZED_REPO = "HelloWorld"    -- Your GitHub repository name
-local GITHUB_PAT = os.getenv("GITHUB_PAT") -- Fetches the token from the environment
 
--- GitHub API URL to fetch raw file content (adjust the file path if needed)
-local raw_file_url = "https://raw.githubusercontent.com/" .. AUTHORIZED_OWNER .. "/" .. AUTHORIZED_REPO .. "/main/Hello"
+-- GitHub API URL to check repository details
+local api_url = "https://api.github.com/repos/" .. AUTHORIZED_OWNER .. "/" .. AUTHORIZED_REPO
 
-local function fetch_file_content()
-    -- Prepare the headers with the Authorization token
-    local headers = {
-        ["Authorization"] = "token " .. GITHUB_PAT,
-        ["Accept"] = "application/vnd.github.v3+json"
-    }
-
+local function is_valid_repository()
+    -- GitHub API request without authentication
     local request = {
-        Url = raw_file_url,
-        Method = "GET",
-        Headers = headers
+        Url = api_url,
+        Method = "GET"
     }
 
     local success, response = pcall(function()
@@ -26,22 +19,24 @@ local function fetch_file_content()
     end)
 
     if success then
-        return response.Body -- The raw content of the file
+        -- Parse the JSON response
+        local data = HttpService:JSONDecode(response.Body)
+        
+        -- Check if the repository details are correct
+        if data.owner.login == AUTHORIZED_OWNER and data.name == AUTHORIZED_REPO then
+            print("HAHAHAHAH IT WORKS")
+            return true
+        else
+            warn("Repository does not match the authorized owner and repo.")
+        end
     else
-        warn("Failed to fetch file content: " .. response)
+        warn("Failed to connect to GitHub API: " .. response)
     end
 
-    return nil
+    return false
 end
 
--- Fetch the file content
-local file_content = fetch_file_content()
-
-if file_content then
-    -- Print the raw content of the file if successfully fetched
-    print("Fetched File Content:\n" .. file_content)
-    -- Print confirmation that everything is working
-    print("HAHAHAHAH IT WORKS")
-else
-    error("Failed to fetch file content from GitHub")
+-- Check if the repository is valid before execution
+if not is_valid_repository() then
+    error("Unauthorized repository detected. Script execution blocked.")
 end
