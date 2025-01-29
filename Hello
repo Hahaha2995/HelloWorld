@@ -1,25 +1,14 @@
--- Define the correct URL that is allowed for execution
-local allowedUrl = "https://raw.githubusercontent.com/Hahaha2995/KeySystem/main/Slave"
-
--- Define the URL to fetch the script from
 local url = "https://raw.githubusercontent.com/Hahaha2995/HelloWorld/main/Hello"
+local response = game:HttpGet(url)
 
--- Check if the URL matches the allowed repository
-if url == allowedUrl then
-    -- Fetch the content of the script from the allowed URL
-    local response = game:HttpGet(url)
+-- Mark the environment to indicate the script is being loaded via loadstring
+_G.isLoadedFromString = true
 
-    -- Mark the environment to indicate the script is being loaded via loadstring
-    _G.isLoadedFromString = true
+-- Use loadstring to execute the fetched script
+local func, err = loadstring(response)
 
-    -- Use loadstring to execute the fetched script
-    local func, err = loadstring(response)
-
-    if func then
-        func()  -- Execute the loaded script
-    else
-        warn("Failed to load the script: " .. err)  -- If loadstring fails, show the error message
-    end
+if func then
+    func()  -- Execute the loaded script
 else
-    warn("This script is not from the allowed repository URL!")
+    warn("Failed to load the script: " .. err)  -- If loadstring fails, show the error message
 end
