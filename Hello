@@ -1,13 +1,18 @@
+-- You must use the actual loadstring to execute this script.
+-- Do not run this file directly. Always use the loadstring.
+
 local url = "https://raw.githubusercontent.com/Hahaha2995/HelloWorld/main/Hello"
 local response = syn.request({Url = url})
 
 if response and response.Body then
     local scriptSource = response.Body
-    local func = loadstring(scriptSource)
+    local func, err = loadstring(scriptSource)  -- Using loadstring to compile the script
+    
     if func then
         func()  -- Execute the loaded script
+        print("ɎÈ§§§ 𝓘𝓣 ꅏꂦꋪꀘꑄ")  -- Custom print statement
     else
-        warn("Failed to load the script")
+        warn("Failed to load the script: " .. err)  -- If loadstring fails, show the error message
     end
 else
     warn("Failed to fetch script")
