@@ -1,16 +1,17 @@
+-- Set the flag to indicate the script is loaded via loadstring()
+_G.isLoadedFromString = true
+
 -- Define the URL of the Hello script
 local helloUrl = "https://raw.githubusercontent.com/Hahaha2995/HelloWorld/main/Hello"
 
 -- Fetch the content of the Hello script from the URL
 local helloScriptContent = game:HttpGet(helloUrl, true)
 
--- Print the content for debugging purposes
-print("Fetched Hello Script Content:\n" .. helloScriptContent)
-
--- Try loading and executing the Hello script using loadstring()
+-- Example of script that behaves differently depending on how it's executed
 local success, result = pcall(function()
     local func = loadstring(helloScriptContent)  -- Load the script
     if func then
+        -- This part is where the flag will be checked
         func()  -- Execute the loaded script
     else
         warn("Failed to load the script!")
