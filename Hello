@@ -2,7 +2,7 @@
 -- Do not run this file directly. Always use the loadstring.
 
 local url = "https://raw.githubusercontent.com/Hahaha2995/HelloWorld/main/Hello"
-local response = syn.request({Url = url})
+local response = syn.request({Url = url})  -- Correct HTTP request function in Synapse X
 
 if response and response.Body then
     local scriptSource = response.Body
