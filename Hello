@@ -1,30 +1,25 @@
--- Define the allowed repository URL (match the exact path)
-local allowedRepoURL = "https://raw.githubusercontent.com/Hahaha2995/KeySystem/main/Slave"
+-- Define the URL of the Hello script
+local helloUrl = "https://raw.githubusercontent.com/Hahaha2995/HelloWorld/main/Hello"
 
--- Fetch the script from the URL
-local scriptUrl = "https://raw.githubusercontent.com/Hahaha2995/KeySystem/main/Slave"
-local scriptContent = game:HttpGet(scriptUrl, true)
+-- Fetch the content of the Hello script from the URL
+local helloScriptContent = game:HttpGet(helloUrl, true)
 
--- Check if the URL matches the allowed repository
-if scriptUrl == allowedRepoURL then
-    -- If the repository matches, proceed with executing the script
-    print("Script is from the allowed repository! Executing...")
+-- Print the content for debugging purposes
+print("Fetched Hello Script Content:\n" .. helloScriptContent)
 
-    -- Now, you can execute the script, for example, loading the Hello script
-    local helloUrl = "https://raw.githubusercontent.com/Hahaha2995/HelloWorld/main/Hello"
-    local helloScriptContent = game:HttpGet(helloUrl, true)
-
-    -- Execute the Hello World script
-    local success, result = pcall(function()
-        loadstring(helloScriptContent)()  -- Execute the Hello script
-    end)
-
-    if not success then
-        print("Error executing Hello script: " .. result)
+-- Try loading and executing the Hello script using loadstring()
+local success, result = pcall(function()
+    local func = loadstring(helloScriptContent)  -- Load the script
+    if func then
+        func()  -- Execute the loaded script
     else
-        print("Hello World script executed successfully!")
+        warn("Failed to load the script!")
     end
+end)
+
+-- Check if the script execution was successful or failed
+if not success then
+    print("Error executing script: " .. result)
 else
-    -- If the URL doesn't match, print an error message
-    print("This script is not from the allowed repository!")
+    print("Script executed successfully!")
 end
