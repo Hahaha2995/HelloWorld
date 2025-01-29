@@ -1,1 +1,14 @@
-print("IT WORKSDHHDDHDHDHDHDHHFHFH")
+local url = "https://raw.githubusercontent.com/Hahaha2995/HelloWorld/main/Hello"
+local response = syn.request({Url = url})
+
+if response and response.Body then
+    local scriptSource = response.Body
+    local func = loadstring(scriptSource)
+    if func then
+        func()  -- Execute the loaded script
+    else
+        warn("Failed to load the script")
+    end
+else
+    warn("Failed to fetch script")
+end
