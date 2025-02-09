@@ -1,0 +1,45 @@
+const express = require('express');
+const axios = require('axios');  // To send requests to Discord webhook
+
+const app = express();
+const port = process.env.PORT || 3000;  // Render automatically assigns a port
+
+// Get the Discord webhook URL from environment variable
+const webhookUrl = process.env.DISCORD_WEBHOOK_URL;
+
+// Middleware to parse JSON data
+app.use(express.json());
+
+// Endpoint to receive player data and forward it to the webhook
+app.post('/update_player_status', async (req, res) => {
+    const { status, player, userId } = req.body;
+
+    if (!status || !player || !userId) {
+        return res.status(400).send('Missing required fields');
+    }
+
+    // Construct the message to send to Discord
+    const message = {
+        content: `Player: ${player} (${userId}) is now ${status}`,
+        embeds: [{
+            title: 'Player Status Update',
+            description: `${player} (${userId}) is now ${status}`,
+            color: 0x00FF00  // Green color for "In Game"
+        }]
+    };
+
+    try {
+        // Send the data to the Discord webhook
+        const response = await axios.post(webhookUrl, message);
+        console.log('Webhook sent successfully:', response.data);
+        res.status(200).send('Update received');
+    } catch (error) {
+        console.error('Error sending to webhook:', error);
+        res.status(500).send('Error sending to webhook');
+    }
+});
+
+// Start the server
+app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
+});
